@@ -1,0 +1,69 @@
+/*
+package backup
+import (
+	"../interfaceExploit"
+	"./httpSubmit"
+	"time"
+	"fmt"
+)
+func submitSingleFlag(typeS string,flag interfaceExploit.FlagInfo,result chan interfaceExploit.FlagInfo){
+	if(typeS == interfaceExploit.HTTP){
+		url:=interfaceExploit.UrlSubmit
+		flag.Status=httpSubmit.SubmitFlagHttp(flag.Flag,url)
+		result <-flag
+	}else{
+		//TODO
+	}
+}
+
+
+
+func submitSingleTeam(team interfaceExploit.TeamInfo, typeS string,ch2 chan interfaceExploit.TeamInfo){
+	for i,flag:= range team.Flag{
+		if flag.Status=="NEW" || flag.Status=="ERROR"{
+			newflag:=make(chan interfaceExploit.FlagInfo)
+			go submitSingleFlag(typeS,flag,newflag)
+			team.Flag[i]=<-newflag
+			if team.Flag[i].Status=="ok"{
+				team.Flags+=1
+			}
+
+		}else{
+			break //non le guardo veramente tutte
+		}
+	}
+	ch2<-team
+
+}
+func submit(exploit interfaceExploit.ExploitInfo,typeS string, ch1 chan interfaceExploit.ExploitInfo){
+	for i, team := range exploit.Teams{
+		if(team.Flag[0].Status=="NEW"|| team.Flag[0].Status=="ERROR"){
+			oldFlags:=team.Flags
+			newTeam:=make(chan interfaceExploit.TeamInfo)
+			go submitSingleTeam(team,typeS,newTeam)
+			exploit.Teams[i]=<-newTeam
+			exploit.Flags+=(exploit.Teams[i].Flags - oldFlags)
+
+		}else{
+			break;
+		}
+	}
+	ch1 <- exploit
+}
+
+
+
+func Loop(typeSubmit string){
+	for{
+		fmt.Println("Executing Submits")
+		for i, exploit:=range interfaceExploit.Exploits{
+			if(exploit.Active ){
+				ch:=make(chan interfaceExploit.ExploitInfo)
+				go submit(exploit,typeSubmit,ch)
+				interfaceExploit.Exploits[i]=<-ch
+			}
+		}
+		time.Sleep(time.Duration(interfaceExploit.TimeSubmit) * time.Second)
+	}
+}
+*/
