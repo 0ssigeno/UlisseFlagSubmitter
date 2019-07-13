@@ -14,10 +14,12 @@ func submitSingleFlag(typeS string,indexFlag int,indexTeam int,indexExploit int)
 		if status=="OK"{
 			interfaceExploit.Exploits[indexExploit].Teams[indexTeam].Flags+=1
 			interfaceExploit.Exploits[indexExploit].Flags+=1
+		}else{
 		}
 	}else{
 		//TODO
 	}
+
 }
 
 
@@ -27,18 +29,19 @@ func submitSingleTeam( typeS string,indexTeam int, indexExploit int){
 		if flag.Status=="NEW" || flag.Status=="ERROR"{
 			go submitSingleFlag(typeS,indexFlag,indexTeam,indexExploit)
 		}else{
-			break //non le guardo veramente tutte
+			//break //non le guardo veramente tutte
 		}
 	}
+
 
 }
 func submit(typeS string,indexExploit int){
 	for indexTeam, team := range interfaceExploit.Exploits[indexExploit].Teams{
 		if(team.Flag[0].Status=="NEW"|| team.Flag[0].Status=="ERROR"){
-			go submitSingleTeam(typeS,indexTeam,indexExploit)
+			 go submitSingleTeam(typeS,indexTeam,indexExploit)
 
 		}else{
-			break;
+			//break;
 		}
 	}
 }
@@ -50,7 +53,7 @@ func Loop(typeSubmit string){
 		fmt.Println("Executing Submits")
 		for indexExploit, exploit:=range interfaceExploit.Exploits{
 			if(exploit.Active ){
-				go submit(typeSubmit,indexExploit)
+				go  submit(typeSubmit,indexExploit)
 			}
 		}
 		time.Sleep(time.Duration(interfaceExploit.TimeSubmit) * time.Second)
