@@ -1,14 +1,15 @@
 package notifier
 
 import (
-	"log"
-	"../interfaceExploit"
-	"github.com/fsnotify/fsnotify"
-	"strings"
-	"path/filepath"
 	"../execExploits"
+	"../interfaceExploit"
 	"fmt"
+	"github.com/fsnotify/fsnotify"
+	"log"
+	"path/filepath"
+	"strings"
 )
+
 //TODO controllo solo i file .teams
 func Loop() {
 	watcher, err := fsnotify.NewWatcher()
@@ -26,23 +27,23 @@ func Loop() {
 					return
 				}
 				if event.Op&fsnotify.Create == fsnotify.Create {
-					completeName:= strings.Split(event.Name,".")
-					if len(completeName)==1{
+					completeName := strings.Split(event.Name, ".")
+					if len(completeName) == 1 {
 						break
 					}
-					if completeName[1]==interfaceExploit.TeamFileExtension{
-						exploit:=execExploits.CreateExploit(filepath.Base(completeName[0]))
+					if completeName[1] == interfaceExploit.TeamFileExtension {
+						exploit := execExploits.CreateExploit(filepath.Base(completeName[0]))
 						execExploits.AddExploitToList(exploit)
-						fmt.Printf("Added exploit %s ",filepath.Base(completeName[0]))
+						fmt.Printf("Added exploit %s ", filepath.Base(completeName[0]))
 					}
-				}else if event.Op&fsnotify.Remove == fsnotify.Remove {
-					completeName:= strings.Split(event.Name,".")
-					if len(completeName)==1{
+				} else if event.Op&fsnotify.Remove == fsnotify.Remove {
+					completeName := strings.Split(event.Name, ".")
+					if len(completeName) == 1 {
 						break
 					}
-					if completeName[1]==interfaceExploit.TeamFileExtension{
+					if completeName[1] == interfaceExploit.TeamFileExtension {
 						execExploits.RemoveExploitFromList(filepath.Base(completeName[0]))
-						fmt.Printf("Removed exploit %s ",filepath.Base(completeName[0]))
+						fmt.Printf("Removed exploit %s ", filepath.Base(completeName[0]))
 					}
 				}
 			case err, ok := <-watcher.Errors:
